@@ -1,9 +1,69 @@
 :root {
   box-sizing: border-box;
+  --primary-black: #020617;
+  --primary-gray: #94a3b8;
 }
 
 *,
 ::before,
 ::after {
   box-sizing: inherit;
+}
+
+body {
+  background-color: #f3f4f6;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serifF;
+  background-color: var(--primary-white);
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  min-height: 100vh;
+}
+
+.player-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.player-name {
+  font-size: 2.25rem;
+}
+
+.player-score {
+  font-size: 1.75rem;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  height: 250px;
+  width: 250px;
+  margin: 30px auto;
+  border: 1px dashed #000;
+}
+
+.footer {
+  margin-top: auto;
+  text-align: center;
+}
+
+.footer,
+.footer a {
+  text-decoration: none;
+  color: var(--primary-gray);
+}
+
+.footer span a:hover {
+  color: var(--primary-black);
+  text-decoration: underline;
 }
