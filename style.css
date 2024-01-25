@@ -20,7 +20,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 50px;
-  min-height: 100vh;
+  overflow: hidden;
 }
 
 .player-container {
@@ -46,10 +46,38 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  height: 250px;
-  width: 250px;
+  height: 275px;
+  width: 275px;
   margin: 30px auto;
-  border: 1px dashed #000;
+}
+
+.box {
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.box:nth-child(1),
+.box:nth-child(2),
+.box:nth-child(3) {
+  border-top: none;
+}
+
+.box:nth-child(1),
+.box:nth-child(4),
+.box:nth-child(7) {
+  border-left: none;
+}
+
+.box:nth-child(3),
+.box:nth-child(6),
+.box:nth-child(9) {
+  border-right: none;
+}
+
+.box:nth-child(7),
+.box:nth-child(8),
+.box:nth-child(9) {
+  border-bottom: none;
 }
 
 .footer {
