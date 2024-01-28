@@ -54,6 +54,10 @@ body {
 .box {
   border: 1px solid black;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.5rem;
 }
 
 .box:nth-child(1),
@@ -79,6 +83,7 @@ body {
 .box:nth-child(9) {
   border-bottom: none;
 }
+
 
 .footer {
   margin-top: auto;
