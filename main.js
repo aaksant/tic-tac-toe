@@ -37,14 +37,13 @@ const board = (() => {
         filledBox[condition[1]] === filledBox[condition[2]]
       ) {
         isWin = true;
-        controller.displayWinner(currentMark);
+        controller.displayWinner(filledBox[condition[0]]);
       }
     });
   };
 
   return { fillBox, checkWinner };
 })();
-
 
 const Player = (mark) => {
   const getMark = () => {
@@ -54,12 +53,11 @@ const Player = (mark) => {
   return { getMark };
 };
 
-
 const controller = (() => {
   const message = document.querySelector('.message');
 
   const displayTurn = (mark) => {
-    message.textContent = `${mark}'s turn`; 
+    message.textContent = `${mark}'s turn`;
   };
 
   const displayWinner = (mark) => {
@@ -69,7 +67,6 @@ const controller = (() => {
   return { displayTurn, displayWinner };
 })();
 
-
 const game = (() => {
   const startRound = () => {
     board.fillBox();
@@ -77,6 +74,5 @@ const game = (() => {
 
   return { startRound };
 })();
-
 
 game.startRound();
