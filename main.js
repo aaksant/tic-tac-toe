@@ -1,21 +1,17 @@
-// TODO: 1 - DONE - CORE - Complete basic gameplay
-// TODO: 2 - DONE - CORE - Add check winner feature
-// TODO: 2.1 - DONE - OPTIONAL - Alert when winner have found
-// TODO: 3 - DONE - Add reset feature
-
-const init = (() => {
+const board = (() => {
   const filledBox = ['', '', '', '', '', '', '', '', ''];
   const boxNodes = document.querySelectorAll('.box');
-  let currentMove = 'X';
+  let currentMark = 'X';
   let isWin = false;
 
   const fillBox = () => {
     boxNodes.forEach((box, i) => {
       box.addEventListener('click', () => {
         if (filledBox[i] === '') {
-          filledBox[i] = currentMove;
-          box.textContent = currentMove;
-          currentMove = (currentMove === 'X') ? 'O' : 'X';
+          filledBox[i] = currentMark;
+          box.textContent = currentMark;
+          currentMark = (currentMark === 'X') ? 'O' : 'X';
+          controller.displayTurn(currentMark);
           checkWinner();
         }
       });
@@ -33,36 +29,54 @@ const init = (() => {
       [0, 4, 8],
       [2, 4, 6]
     ];
-  
+
     winConditions.forEach((condition) => {
       if (
+        filledBox[condition[0]] !== '' &&
         filledBox[condition[0]] === filledBox[condition[1]] &&
-        filledBox[condition[1]] === filledBox[condition[2]] &&
-        filledBox[condition[0]] !== ''
+        filledBox[condition[1]] === filledBox[condition[2]]
       ) {
         isWin = true;
-        setTimeout(showMessage, 100);
+        controller.displayWinner(currentMark);
       }
     });
   };
-  
-  const showMessage = () => {
-    if (isWin) {
-      alert('Winner has found!');
-    }
-    reset();
-  };
 
-  const reset = () => {
-    boxNodes.forEach((box) => {
-      box.textContent = '';
-    });
-    filledBox.fill('');
-    currentMove = 'X';
-    isWin = false;
-  };
-
-  return { fillBox };
+  return { fillBox, checkWinner };
 })();
 
-init.fillBox();
+
+const Player = (mark) => {
+  const getMark = () => {
+    return mark;
+  };
+
+  return { getMark };
+};
+
+
+const controller = (() => {
+  const message = document.querySelector('.message');
+
+  const displayTurn = (mark) => {
+    message.textContent = `${mark}'s turn`; 
+  };
+
+  const displayWinner = (mark) => {
+    message.textContent = `${mark} wins!`;
+  };
+
+  return { displayTurn, displayWinner };
+})();
+
+
+const game = (() => {
+  const startRound = () => {
+    board.fillBox();
+  };
+
+  return { startRound };
+})();
+
+
+game.startRound();
