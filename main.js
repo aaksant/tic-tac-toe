@@ -2,11 +2,12 @@ const board = (() => {
   const filledBox = ['', '', '', '', '', '', '', '', ''];
   const boxNodes = document.querySelectorAll('.box');
   let currentMark = 'X';
+  let isWin = false;
 
   const fillBox = () => {
     boxNodes.forEach((box, i) => {
       box.addEventListener('click', () => {
-        if (filledBox[i] === '') {
+        if (filledBox[i] === '' && !isWin) {
           filledBox[i] = currentMark;
           box.textContent = currentMark;
           currentMark = currentMark === 'X' ? 'O' : 'X';
@@ -19,11 +20,14 @@ const board = (() => {
 
   const checkWinner = () => {
     const winnerMark = board.getWinnerMark();
-  
-    if (winnerMark === 'draw') {
-      controller.displayWinnerMessage(winnerMark);
-    } else if (winnerMark) {
-      controller.displayWinnerMessage(winnerMark);
+
+    if (winnerMark === 'draw' || winnerMark) {
+      isWin = true;
+      if (winnerMark === 'draw') {
+        controller.displayTurnMessage(winnerMark);
+      } else {
+        controller.displayWinnerMessage(winnerMark);
+      }
     }
   };
 
@@ -57,10 +61,11 @@ const board = (() => {
   };
 
   const reset = () => {
-    boxNodes.forEach((box) => box.textContent = '');
+    boxNodes.forEach((box) => (box.textContent = ''));
     filledBox.fill('');
     currentMark = 'X';
     controller.displayTurnMessage(currentMark);
+    isWin = false;
   };
 
   return { fillBox, reset, getWinnerMark };
