@@ -1,7 +1,7 @@
 :root {
   box-sizing: border-box;
   --primary-black: #020617;
-  --primary-gray: #94a3b8;
+  --primary-gray: #475569;
 }
 
 *,
@@ -55,7 +55,7 @@ body {
 }
 
 .box {
-  border: 1px solid black;
+  border: 1px solid var(--primary-gray);
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -63,30 +63,13 @@ body {
   font-size: 5rem;
 }
 
-.box:nth-child(1),
-.box:nth-child(2),
-.box:nth-child(3) {
-  border-top: none;
+.box:hover {
+  background-color: #f1f5f9;
 }
 
-.box:nth-child(1),
-.box:nth-child(4),
-.box:nth-child(7) {
-  border-left: none;
+.box:active {
+  background-color: #e2e8f0;
 }
-
-.box:nth-child(3),
-.box:nth-child(6),
-.box:nth-child(9) {
-  border-right: none;
-}
-
-.box:nth-child(7),
-.box:nth-child(8),
-.box:nth-child(9) {
-  border-bottom: none;
-}
-
 
 .footer {
   margin-top: auto;
