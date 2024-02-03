@@ -1,3 +1,21 @@
+const Player = (mark) => {
+  let score = 0;
+
+  const getMark = () => {
+    return mark;
+  };
+
+  const getScore = () => {
+    return score;
+  };
+
+  const addScore = () => {
+    score++;
+  };
+
+  return { getMark, getScore, addScore };
+};
+
 const board = (() => {
   const filledBox = ['', '', '', '', '', '', '', '', ''];
   const boxNodes = document.querySelectorAll('.box');
@@ -11,7 +29,7 @@ const board = (() => {
           filledBox[i] = currentMark;
           box.textContent = currentMark;
           currentMark = currentMark === 'X' ? 'O' : 'X';
-          controller.displayTurnMessage(currentMark);
+          textHandler.displayTurnMessage(currentMark);
           checkWinner();
         }
       });
@@ -19,15 +37,19 @@ const board = (() => {
   };
 
   const checkWinner = () => {
-    const winnerMark = board.getWinnerMark();
+    const winnerMark = getWinnerMark();
 
     if (winnerMark === 'draw' || winnerMark) {
       isWin = true;
+      
       if (winnerMark === 'draw') {
-        controller.displayTurnMessage(winnerMark);
+        textHandler.displayTurnMessage(winnerMark);
       } else {
-        controller.displayWinnerMessage(winnerMark);
+        textHandler.displayWinnerMessage(winnerMark);
       }
+      
+      textHandler.displayNewScore(winnerMark);
+      game.updateRound();
     }
   };
 
@@ -56,45 +78,47 @@ const board = (() => {
     if (!filledBox.includes('')) {
       return 'draw';
     }
-
-    return null;
   };
 
   const reset = () => {
     boxNodes.forEach((box) => (box.textContent = ''));
     filledBox.fill('');
     currentMark = 'X';
-    controller.displayTurnMessage(currentMark);
+    textHandler.displayTurnMessage(currentMark);
     isWin = false;
   };
 
   return { fillBox, reset, getWinnerMark };
 })();
 
-const Player = (mark) => {
-  const getMark = () => {
-    return mark;
-  };
-
-  return { getMark };
-};
-
-const controller = (() => {
+const textHandler = (() => {
   const message = document.querySelector('.message');
+  let playerXScore = document.querySelector('.x');
+  let playerOScore = document.querySelector('.o');
 
   const displayTurnMessage = (mark) => {
-    message.textContent = `It's ${mark}'s turn!`;
-  };
-
-  const displayWinnerMessage = (mark) => {
     if (mark === 'draw') {
       message.textContent = "It's a tie!";
     } else {
+      message.textContent = `${mark}'s turn`;
+    }
+  };
+
+  const displayWinnerMessage = (mark) => {
+    if (mark !== 'draw') {
       message.textContent = `${mark} wins!`;
     }
   };
 
-  return { displayTurnMessage, displayWinnerMessage };
+  const displayNewScore = (mark) => {
+    if (mark === 'X') {
+      playerXScore.textContent = game.getNewScore(mark) 
+    } else if (mark === 'O') {
+      playerOScore.textContent = game.getNewScore(mark);
+    }
+  };
+
+  return { displayTurnMessage, displayWinnerMessage, displayNewScore };
 })();
 
 const game = (() => {
@@ -106,7 +130,21 @@ const game = (() => {
     board.fillBox();
   };
 
-  return { startRound };
+  const updateRound = () => {
+    currentRound++;
+  };
+
+  const getNewScore = (mark) => {
+    if (mark === 'X') {
+      playerX.addScore();
+      return playerX.getScore();
+    } else if (mark === 'O') {
+      playerO.addScore();
+      return playerO.getScore();
+    }
+  };
+
+  return { startRound, updateRound, getNewScore };
 })();
 
 game.startRound();
