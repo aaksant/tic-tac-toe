@@ -38,21 +38,24 @@ const board = (() => {
 
   const checkWinner = () => {
     const winnerMark = getWinnerMark();
-
+  
     if (winnerMark === 'draw' || winnerMark) {
       isWin = true;
-      
+  
       if (winnerMark === 'draw') {
         textHandler.displayTurnMessage(winnerMark);
       } else {
         textHandler.displayWinnerMessage(winnerMark);
+  
+        setTimeout(() => {
+          textHandler.displayNewScore(winnerMark);
+          game.updateRound();
+          reset();
+        }, 500);
       }
-      
-      textHandler.displayNewScore(winnerMark);
-      game.updateRound();
     }
   };
-
+  
   const getWinnerMark = () => {
     const winConditions = [
       [0, 1, 2],
