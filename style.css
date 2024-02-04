@@ -21,6 +21,12 @@ body {
   flex-direction: column;
 }
 
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 .player-container {
   display: flex;
   justify-content: space-evenly;
