@@ -1,3 +1,5 @@
+const MAX_ROUND = 3;
+
 const Player = (mark) => {
   let score = 0;
 
@@ -20,12 +22,12 @@ const board = (() => {
   const filledBox = ['', '', '', '', '', '', '', '', ''];
   const boxNodes = document.querySelectorAll('.box');
   let currentMark = 'X';
-  let isWin = false;
+  let isRoundFinished = false;
 
   const fillBox = () => {
     boxNodes.forEach((box, i) => {
       box.addEventListener('click', () => {
-        if (filledBox[i] === '' && !isWin) {
+        if (filledBox[i] === '' && !isRoundFinished && !game.isGameFinished()) {
           filledBox[i] = currentMark;
           box.textContent = currentMark;
           currentMark = currentMark === 'X' ? 'O' : 'X';
@@ -38,24 +40,13 @@ const board = (() => {
 
   const checkWinner = () => {
     const winnerMark = getWinnerMark();
-  
+
     if (winnerMark === 'draw' || winnerMark) {
-      isWin = true;
-  
-      if (winnerMark === 'draw') {
-        textHandler.displayTurnMessage(winnerMark);
-      } else {
-        textHandler.displayWinnerMessage(winnerMark);
-  
-        setTimeout(() => {
-          textHandler.displayNewScore(winnerMark);
-          game.updateRound();
-          reset();
-        }, 500);
-      }
+      isRoundFinished = true;
+      game.setNextRound(winnerMark);
     }
   };
-  
+
   const getWinnerMark = () => {
     const winConditions = [
       [0, 1, 2],
@@ -88,7 +79,7 @@ const board = (() => {
     filledBox.fill('');
     currentMark = 'X';
     textHandler.displayTurnMessage(currentMark);
-    isWin = false;
+    isRoundFinished = false;
   };
 
   return { fillBox, reset, getWinnerMark };
@@ -115,13 +106,31 @@ const textHandler = (() => {
 
   const displayNewScore = (mark) => {
     if (mark === 'X') {
-      playerXScore.textContent = game.getNewScore(mark) 
+      playerXScore.textContent = game.getNewScore(mark);
     } else if (mark === 'O') {
       playerOScore.textContent = game.getNewScore(mark);
     }
   };
 
-  return { displayTurnMessage, displayWinnerMessage, displayNewScore };
+  const displayFinalResult = () => {
+    const playerXFinalScore = game.getNewScore('X');
+    const playerOFinalScore = game.getNewScore('O');
+
+    if (playerXFinalScore > playerOFinalScore) {
+      message.textContent = 'Player X wins the game!';
+    } else if (playerXFinalScore < playerOFinalScore) {
+      message.textContent = 'Player O wins the game!';
+    } else {
+      message.textContent = "It's a tie! The game ends in a draw.";
+    }
+  };
+
+  return {
+    displayTurnMessage,
+    displayWinnerMessage,
+    displayNewScore,
+    displayFinalResult
+  };
 })();
 
 const game = (() => {
@@ -147,7 +156,39 @@ const game = (() => {
     }
   };
 
-  return { startRound, updateRound, getNewScore };
+  const isGameFinished = () => {
+    return currentRound > MAX_ROUND;
+  };
+
+  const setNextRound = (winnerMark) => {
+    textHandler.displayTurnMessage(winnerMark);
+    
+    setTimeout(() => {
+      board.reset();
+      
+      if (winnerMark === 'draw') {
+        if (isGameFinished()) {
+          textHandler.displayFinalResult();
+        }
+      } else {
+        if (isGameFinished()) {
+          textHandler.displayFinalResult();
+        }
+        
+        textHandler.displayWinnerMessage(winnerMark);
+        textHandler.displayNewScore(winnerMark);
+        updateRound();
+      }
+    }, 500);
+  };
+
+  return {
+    startRound,
+    updateRound,
+    getNewScore,
+    isGameFinished,
+    setNextRound
+  };
 })();
 
 game.startRound();
