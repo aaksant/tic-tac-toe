@@ -92,3 +92,34 @@ body {
   color: var(--primary-black);
   text-decoration: underline;
 }
+
+dialog {
+  border: none;
+  border-radius: 8px;
+}
+
+#playerDialog {
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  flex-wrap: wrap;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+label {
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+input {
+  padding: 1em;
+  border-radius: 8px;
+  border: 1px solid var(--primary-gray);
+}
