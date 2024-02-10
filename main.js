@@ -87,8 +87,14 @@ const board = (() => {
 
 const textHandler = (() => {
   const message = document.querySelector('.message');
-  let playerXScore = document.querySelector('.x');
-  let playerOScore = document.querySelector('.o');
+
+  const setPlayersName = (playerXName, playerOName) => {
+    const playerXElem = document.querySelector('.player-x .player-name');
+    const playerOElem = document.querySelector('.player-o .player-name');
+
+    playerXElem.textContent = playerXName;
+    playerOElem.textContent = playerOName;
+  };
 
   const displayTurnMessage = (mark) => {
     if (mark === 'draw') {
@@ -105,6 +111,9 @@ const textHandler = (() => {
   };
 
   const displayNewScore = (mark) => {
+    let playerXScore = document.querySelector('.player-x .player-score');
+    let playerOScore = document.querySelector('.player-o .player-score');
+
     if (mark === 'X') {
       playerXScore.textContent = game.getNewScore(mark);
     } else if (mark === 'O') {
@@ -126,6 +135,7 @@ const textHandler = (() => {
   };
 
   return {
+    setPlayersName,
     displayTurnMessage,
     displayWinnerMessage,
     displayNewScore,
@@ -162,10 +172,10 @@ const game = (() => {
 
   const setNextRound = (winnerMark) => {
     textHandler.displayTurnMessage(winnerMark);
-    
+
     setTimeout(() => {
       board.reset();
-      
+
       if (winnerMark === 'draw') {
         if (isGameFinished()) {
           textHandler.displayFinalResult();
@@ -174,7 +184,7 @@ const game = (() => {
         if (isGameFinished()) {
           textHandler.displayFinalResult();
         }
-        
+
         textHandler.displayWinnerMessage(winnerMark);
         textHandler.displayNewScore(winnerMark);
         updateRound();
@@ -191,4 +201,25 @@ const game = (() => {
   };
 })();
 
+const page = (() => {
+  const getDialogData = () => {
+    const dialog = document.getElementById('dialog');
+    document.addEventListener('DOMContentLoaded', () => {
+      dialog.showModal();
+      const submitBtn = document.getElementById('submitBtn');
+
+      submitBtn.addEventListener('click', () => {
+        const playerXName = document.getElementById('playerX').value;
+        const playerOName = document.getElementById('playerO').value;
+
+        textHandler.setPlayersName(playerXName, playerOName);
+        dialog.close();
+      });
+    });
+  };
+
+  return { getDialogData };
+})();
+
 game.startRound();
+page.getDialogData();
